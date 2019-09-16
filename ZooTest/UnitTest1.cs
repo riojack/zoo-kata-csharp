@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace InventoryTest
+namespace ZooTest
 {
     public class UnitTest1
     {

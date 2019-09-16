@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Inventory
+namespace Zoo
 {
     public class Class1
     {
