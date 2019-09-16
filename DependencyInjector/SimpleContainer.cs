@@ -5,11 +5,11 @@ namespace DependencyInjector
 {
     public class SimpleContainer
     {
-        private readonly IDictionary<Type, object> instanceMap = new Dictionary<Type, object>();
+        private IDictionary<Type, object> InstanceMap { get; } = new Dictionary<Type, object>();
 
         public T FindByType<T>() where T : class
         {
-            instanceMap.TryGetValue(typeof(T), out var instance);
+            InstanceMap.TryGetValue(typeof(T), out var instance);
 
             return instance as T;
         }
@@ -18,7 +18,7 @@ namespace DependencyInjector
         {
             var instance = Activator.CreateInstance<T>();
 
-            instanceMap.Add(instance.GetType(), instance);
+            InstanceMap.Add(instance.GetType(), instance);
         }
     }
 }
