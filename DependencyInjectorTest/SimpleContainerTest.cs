@@ -1,8 +1,10 @@
 using DependencyInjector;
 using Xunit;
 
-namespace DependencyInjectorTest {
-    public class SimpleContainerTests {
+namespace DependencyInjectorTest
+{
+    public class SimpleContainerTests
+    {
         [Fact]
         public void ShouldStoreStoreAndRetrieveObjectsByType()
         {
@@ -12,12 +14,24 @@ namespace DependencyInjectorTest {
             container.Store(instanceToStore);
 
             var actualInstance = container.FindByType<FooBarBaz>();
-            
+
             Assert.Same(instanceToStore, actualInstance);
+        }
+
+        [Fact]
+        public void ShouldCreateAnInstanceAndRetrieveByType()
+        {
+            var container = new SimpleContainer();
+
+            container.Configure<FooBarBaz>();
+
+            var actualInstance = container.FindByType<FooBarBaz>();
+
+            Assert.NotNull(actualInstance);
         }
     }
 
-    class FooBarBaz {
-        
+    class FooBarBaz
+    {
     }
 }
