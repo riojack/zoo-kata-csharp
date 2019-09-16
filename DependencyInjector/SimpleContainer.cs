@@ -14,7 +14,7 @@ namespace DependencyInjector
             return instance as T;
         }
 
-        public void Configure<T>()
+        public void Configure<T>() where T : class
         {
             var instance = Activator.CreateInstance<T>();
             var members = instance.GetType().GetProperties();
