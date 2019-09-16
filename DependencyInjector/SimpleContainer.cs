@@ -31,7 +31,7 @@ namespace DependencyInjector
                 instancesForInstance.Add(innerInstance);
             }
 
-            foreach (object innerInstance in instancesForInstance)
+            foreach (var innerInstance in instancesForInstance)
             {
                 InstanceMap.Add(innerInstance.GetType(), innerInstance);
             }
