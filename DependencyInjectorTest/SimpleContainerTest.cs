@@ -25,8 +25,20 @@ namespace DependencyInjectorTest
             container.Configure<House>();
 
             var actualInstance = container.FindByType<House>();
-            
+
             Assert.NotNull(actualInstance.Room);
+        }
+
+        [Fact]
+        public void ShouldStoreInstancesCreatedForProperties()
+        {
+            var container = new SimpleContainer();
+
+            container.Configure<House>();
+
+            var actualInstance = container.FindByType<Room>();
+
+            Assert.NotNull(actualInstance);
         }
     }
 

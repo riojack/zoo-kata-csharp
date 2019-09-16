@@ -20,12 +20,21 @@ namespace DependencyInjector
             var instance = Activator.CreateInstance<T>();
             var members = instance.GetType().GetProperties();
 
+            IList<object> instancesForInstance = new List<object>();
+
             foreach (var member in members)
             {
                 var propertyInfo = instance.GetType().GetProperty(member.Name);
 
                 var innerInstance = Activator.CreateInstance(propertyInfo.PropertyType);
                 propertyInfo.SetMethod.Invoke(instance, new[] {innerInstance});
+
+                instancesForInstance.Add(innerInstance);
+            }
+
+            foreach (object innerInstance in instancesForInstance)
+            {
+                InstanceMap.Add(innerInstance.GetType(), innerInstance);
             }
 
             InstanceMap.Add(instance.GetType(), instance);
