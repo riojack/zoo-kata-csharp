@@ -7,11 +7,6 @@ namespace DependencyInjector
     {
         private readonly IDictionary<Type, object> instanceMap = new Dictionary<Type, object>();
 
-        public void Store(object instanceToStore)
-        {
-            instanceMap.Add(instanceToStore.GetType(), instanceToStore);
-        }
-
         public T FindByType<T>() where T : class
         {
             instanceMap.TryGetValue(typeof(T), out var instance);
@@ -22,7 +17,7 @@ namespace DependencyInjector
         public void Configure<T>()
         {
             var instance = Activator.CreateInstance<T>();
-            
+
             instanceMap.Add(instance.GetType(), instance);
         }
     }
