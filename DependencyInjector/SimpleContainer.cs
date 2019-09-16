@@ -21,10 +21,19 @@ namespace DependencyInjector
                 return;
             }
 
+            var instancesToStore = ConfigureNewInstances<T>();
+
+            foreach (var innerInstance in instancesToStore)
+            {
+                InstanceMap.Add(innerInstance.GetType(), innerInstance);
+            }
+        }
+
+        private IList<object> ConfigureNewInstances<T>() where T : class
+        {
+            IList<object> instancesToStore = new List<object>();
             var instance = Activator.CreateInstance<T>();
             var members = instance.GetType().GetProperties();
-
-            IList<object> instancesForInstance = new List<object>();
 
             foreach (var member in members)
             {
@@ -40,18 +49,15 @@ namespace DependencyInjector
                 else
                 {
                     innerInstance = Activator.CreateInstance(propertyInfo.PropertyType);
-                    instancesForInstance.Add(innerInstance);
+                    instancesToStore.Add(innerInstance);
                 }
 
                 propertyInfo.SetMethod.Invoke(instance, new[] {innerInstance});
             }
 
-            foreach (var innerInstance in instancesForInstance)
-            {
-                InstanceMap.Add(innerInstance.GetType(), innerInstance);
-            }
+            instancesToStore.Add(instance);
 
-            InstanceMap.Add(instance.GetType(), instance);
+            return instancesToStore;
         }
     }
 }
