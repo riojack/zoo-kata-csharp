@@ -10,15 +10,37 @@ namespace DependencyInjectorTest
         {
             var container = new SimpleContainer();
 
-            container.Configure<FooBarBaz>();
+            container.Configure<House>();
 
-            var actualInstance = container.FindByType<FooBarBaz>();
+            var actualInstance = container.FindByType<House>();
 
             Assert.NotNull(actualInstance);
         }
+
+        [Fact]
+        public void ShouldConfigureInstanceProperties()
+        {
+            var container = new SimpleContainer();
+
+            container.Configure<House>();
+
+            var actualInstance = container.FindByType<House>();
+            
+            Assert.NotNull(actualInstance.Room);
+        }
     }
 
-    class FooBarBaz
+    class House
+    {
+        public Room Room { get; set; }
+    }
+
+    class Room
+    {
+        public Window Window { get; set; }
+    }
+
+    class Window
     {
     }
 }
