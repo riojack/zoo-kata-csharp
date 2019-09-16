@@ -24,11 +24,21 @@ namespace DependencyInjector
             foreach (var member in members)
             {
                 var propertyInfo = instance.GetType().GetProperty(member.Name);
+                var propertyType = propertyInfo.PropertyType;
 
-                var innerInstance = Activator.CreateInstance(propertyInfo.PropertyType);
+                object innerInstance;
+
+                if (InstanceMap.ContainsKey(propertyType))
+                {
+                    InstanceMap.TryGetValue(propertyType, out innerInstance);
+                }
+                else
+                {
+                    innerInstance = Activator.CreateInstance(propertyInfo.PropertyType);
+                    instancesForInstance.Add(innerInstance);
+                }
+
                 propertyInfo.SetMethod.Invoke(instance, new[] {innerInstance});
-
-                instancesForInstance.Add(innerInstance);
             }
 
             foreach (var innerInstance in instancesForInstance)

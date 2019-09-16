@@ -40,11 +40,29 @@ namespace DependencyInjectorTest
 
             Assert.NotNull(actualInstance);
         }
+
+        [Fact]
+        public void ShouldCreateOneInstanceAndShareItWithOtherConfiguredObjects()
+        {
+            var container = new SimpleContainer();
+            container.Configure<House>();
+            container.Configure<Office>();
+
+            Room houseRoom = container.FindByType<House>().Room;
+            Room officeRoom = container.FindByType<Office>().ConferenceRoom;
+
+            Assert.Same(houseRoom, officeRoom);
+        }
     }
 
     class House
     {
         public Room Room { get; set; }
+    }
+
+    class Office
+    {
+        public Room ConferenceRoom { get; set; }
     }
 
     class Room
