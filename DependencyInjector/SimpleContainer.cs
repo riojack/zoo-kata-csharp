@@ -16,6 +16,11 @@ namespace DependencyInjector
 
         public void Configure<T>() where T : class
         {
+            if (InstanceMap.ContainsKey(typeof(T)))
+            {
+                return;
+            }
+
             var instance = Activator.CreateInstance<T>();
             var members = instance.GetType().GetProperties();
 

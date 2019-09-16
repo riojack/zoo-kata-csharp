@@ -53,6 +53,21 @@ namespace DependencyInjectorTest
 
             Assert.Same(houseRoom, officeRoom);
         }
+
+        [Fact]
+        public void ShouldDoNothingIfMoreThanOneAttemptIsMadeToCreateAnInstance()
+        {
+            var container = new SimpleContainer();
+            container.Configure<House>();
+
+            var house = container.FindByType<House>();
+
+            container.Configure<House>();
+
+            var secondHouse = container.FindByType<House>();
+
+            Assert.Same(house, secondHouse);
+        }
     }
 
     class House
