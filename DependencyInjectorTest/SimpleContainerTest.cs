@@ -68,6 +68,17 @@ namespace DependencyInjectorTest
 
             Assert.Same(house, secondHouse);
         }
+        
+        [Fact]
+        public void ShouldRecursivelyConfigureProperties()
+        {
+            var container = new SimpleContainer();
+            container.Configure<House>();
+
+            Window window = container.FindByType<House>().Room.Window;
+
+            Assert.NotNull(window);
+        }
     }
 
     class House

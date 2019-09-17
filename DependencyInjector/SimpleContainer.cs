@@ -16,9 +16,12 @@ namespace DependencyInjector
 
         public void Configure<T>() where T : class
         {
-            if (!InstanceMap.ContainsKey(typeof(T)))
+            var typeToInstantiate = typeof(T);
+            
+            if (!InstanceMap.ContainsKey(typeToInstantiate))
             {
-                var instancesToStore = ConfigureNewInstances<T>();
+                var instancesToStore = new List<object>();
+                ConfigureNewInstance(typeToInstantiate, instancesToStore);
 
                 foreach (var innerInstance in instancesToStore)
                 {
@@ -27,10 +30,9 @@ namespace DependencyInjector
             }
         }
 
-        private IList<object> ConfigureNewInstances<T>() where T : class
+        private object ConfigureNewInstance(Type typeToInstantiate, IList<object> newInstancesAccumulator)
         {
-            var instancesToStore = new List<object>();
-            var instance = Activator.CreateInstance<T>();
+            var instance = Activator.CreateInstance(typeToInstantiate);
             var members = instance.GetType().GetProperties();
 
             foreach (var member in members)
@@ -46,16 +48,15 @@ namespace DependencyInjector
                 }
                 else
                 {
-                    innerInstance = Activator.CreateInstance(propertyInfo.PropertyType);
-                    instancesToStore.Add(innerInstance);
+                    innerInstance = ConfigureNewInstance(propertyType, newInstancesAccumulator);
                 }
 
                 propertyInfo.SetMethod.Invoke(instance, new[] {innerInstance});
             }
 
-            instancesToStore.Add(instance);
+            newInstancesAccumulator.Add(instance);
 
-            return instancesToStore;
+            return instance;
         }
     }
 }
