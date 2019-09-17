@@ -16,22 +16,20 @@ namespace DependencyInjector
 
         public void Configure<T>() where T : class
         {
-            if (InstanceMap.ContainsKey(typeof(T)))
+            if (!InstanceMap.ContainsKey(typeof(T)))
             {
-                return;
-            }
+                var instancesToStore = ConfigureNewInstances<T>();
 
-            var instancesToStore = ConfigureNewInstances<T>();
-
-            foreach (var innerInstance in instancesToStore)
-            {
-                InstanceMap.Add(innerInstance.GetType(), innerInstance);
+                foreach (var innerInstance in instancesToStore)
+                {
+                    InstanceMap.Add(innerInstance.GetType(), innerInstance);
+                }
             }
         }
 
         private IList<object> ConfigureNewInstances<T>() where T : class
         {
-            IList<object> instancesToStore = new List<object>();
+            var instancesToStore = new List<object>();
             var instance = Activator.CreateInstance<T>();
             var members = instance.GetType().GetProperties();
 
