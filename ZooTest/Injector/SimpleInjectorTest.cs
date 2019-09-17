@@ -3,12 +3,12 @@ using Zoo.Injector;
 
 namespace ZooTest.Injector
 {
-    public class SimpleContainerTests
+    public class SimpleInjectorTests
     {
         [Fact]
         public void ShouldCreateAnInstanceAndRetrieveByType()
         {
-            var container = new SimpleContainer();
+            var container = new SimpleInjector();
 
             container.Configure<House>();
 
@@ -20,7 +20,7 @@ namespace ZooTest.Injector
         [Fact]
         public void ShouldConfigureInstanceProperties()
         {
-            var container = new SimpleContainer();
+            var container = new SimpleInjector();
 
             container.Configure<House>();
 
@@ -32,7 +32,7 @@ namespace ZooTest.Injector
         [Fact]
         public void ShouldStoreInstancesCreatedForProperties()
         {
-            var container = new SimpleContainer();
+            var container = new SimpleInjector();
 
             container.Configure<House>();
 
@@ -44,7 +44,7 @@ namespace ZooTest.Injector
         [Fact]
         public void ShouldCreateOneInstanceAndShareItWithOtherConfiguredObjects()
         {
-            var container = new SimpleContainer();
+            var container = new SimpleInjector();
             container.Configure<House>();
             container.Configure<Office>();
 
@@ -57,7 +57,7 @@ namespace ZooTest.Injector
         [Fact]
         public void ShouldDoNothingIfMoreThanOneAttemptIsMadeToCreateAnInstance()
         {
-            var container = new SimpleContainer();
+            var container = new SimpleInjector();
             container.Configure<House>();
 
             var house = container.FindByType<House>();
@@ -72,7 +72,7 @@ namespace ZooTest.Injector
         [Fact]
         public void ShouldRecursivelyConfigureProperties()
         {
-            var container = new SimpleContainer();
+            var container = new SimpleInjector();
             container.Configure<House>();
 
             Window window = container.FindByType<House>().Room.Window;

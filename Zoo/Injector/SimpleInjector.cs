@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Zoo.Injector
 {
-    public class SimpleContainer
+    public class SimpleInjector
     {
         private IDictionary<Type, object> InstanceMap { get; } = new Dictionary<Type, object>();
 
