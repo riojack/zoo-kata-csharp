@@ -1,7 +1,7 @@
-using DependencyInjector;
 using Xunit;
+using Zoo.Injector;
 
-namespace DependencyInjectorTest
+namespace ZooTest.Injector
 {
     public class SimpleContainerTests
     {

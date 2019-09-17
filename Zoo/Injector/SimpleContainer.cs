@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DependencyInjector
+namespace Zoo.Injector
 {
     public class SimpleContainer
     {
