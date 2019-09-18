@@ -88,6 +88,20 @@ namespace ZooTest.Injector
 
             Assert.Null(shouldNotExist);
         }
+
+        [Fact]
+        public void ShouldStoreAPreBakedObjectWithoutConfiguringItsDependencies()
+        {
+            var container = new SimpleInjector();
+            var house = new House();
+            
+            container.Store(house);
+
+            var houseFromContainer = container.FindByType<House>();
+            
+            Assert.NotNull(houseFromContainer);
+            Assert.Null(house.Room);
+        }
     }
 
     class House

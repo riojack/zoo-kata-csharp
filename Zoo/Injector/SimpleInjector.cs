@@ -14,10 +14,16 @@ namespace Zoo.Injector
             return instance as T;
         }
 
+        public void Store<T>(T thingToStore) where T : class
+        {
+            var type = thingToStore.GetType();
+            InstanceMap.Add(type, thingToStore);
+        }
+
         public void Configure<T>() where T : class
         {
             var typeToInstantiate = typeof(T);
-            
+
             if (!InstanceMap.ContainsKey(typeToInstantiate))
             {
                 var instancesToStore = new List<object>();
