@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Xunit;
 using Zoo.Injector;
 
@@ -101,6 +102,19 @@ namespace ZooTest.Injector
             
             Assert.NotNull(houseFromContainer);
             Assert.Null(house.Room);
+        }
+
+        [Fact]
+        public void ShouldStoreAndLoadCollectionTypes()
+        {
+            var container = new SimpleInjector();
+            var houses = new List<House> {new House(), new House(), new House()};
+            
+            container.Store(houses);
+
+            var housesFromStore = container.FindByType<List<House>>();
+            
+            Assert.Same(houses, housesFromStore);
         }
     }
 
