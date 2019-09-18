@@ -29,7 +29,10 @@ namespace ZooIntegrationTest
 
         public void KillZooConsoleApp()
         {
-            ZooConsoleApp.Kill();
+            if (!ZooConsoleApp.HasExited)
+            {
+                ZooConsoleApp.Kill();
+            }
         }
 
         public async Task<string> ReadLineAsync()
