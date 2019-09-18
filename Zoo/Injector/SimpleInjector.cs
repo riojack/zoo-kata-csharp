@@ -30,7 +30,7 @@ namespace Zoo.Injector
             }
         }
 
-        private object ConfigureNewInstance(Type typeToInstantiate, IList<object> newInstancesAccumulator)
+        private object ConfigureNewInstance(Type typeToInstantiate, ICollection<object> newInstancesAccumulator)
         {
             var instance = Activator.CreateInstance(typeToInstantiate);
             var members = instance.GetType().GetProperties();
