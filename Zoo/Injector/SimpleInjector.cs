@@ -38,6 +38,11 @@ namespace Zoo.Injector
 
         private object ConfigureNewInstance(Type typeToInstantiate, ICollection<object> newInstancesAccumulator)
         {
+            if (typeToInstantiate.Namespace.StartsWith("System"))
+            {
+                return null;
+            }
+
             var instance = Activator.CreateInstance(typeToInstantiate);
             var members = instance.GetType().GetProperties();
 

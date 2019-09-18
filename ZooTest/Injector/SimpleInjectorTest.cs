@@ -131,6 +131,18 @@ namespace ZooTest.Injector
 
             Assert.Same(houses, block.Houses);
         }
+
+        [Fact]
+        public void ShouldNotAutomaticallyConfigureDotNetTypedDependencies()
+        {
+            var container = new SimpleInjector();
+
+            container.Configure<Block>();
+
+            var block = container.FindByType<Block>();
+
+            Assert.Null(block.Houses);
+        }
     }
 
     class Block
