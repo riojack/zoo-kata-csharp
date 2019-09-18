@@ -68,7 +68,7 @@ namespace ZooTest.Injector
 
             Assert.Same(house, secondHouse);
         }
-        
+
         [Fact]
         public void ShouldRecursivelyConfigureProperties()
         {
@@ -78,6 +78,15 @@ namespace ZooTest.Injector
             Window window = container.FindByType<House>().Room.Window;
 
             Assert.NotNull(window);
+        }
+
+        [Fact]
+        public void ShouldReturnNullIfNothingIsFoundForTheGivenType()
+        {
+            var container = new SimpleInjector();
+            var shouldNotExist = container.FindByType<House>();
+
+            Assert.Null(shouldNotExist);
         }
     }
 
