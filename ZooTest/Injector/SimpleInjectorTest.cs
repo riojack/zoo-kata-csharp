@@ -31,6 +31,17 @@ namespace ZooTest.Injector
         }
 
         [Fact]
+        public void ShouldSkipReadOnlyPropertiesAndNotThrowException()
+        {
+            var container = new SimpleInjector();
+            container.Configure<ReadOnlyFoo>();
+
+            var actualInstance = container.FindByType<ReadOnlyFoo>();
+
+            Assert.Null(actualInstance.Window);
+        }
+
+        [Fact]
         public void ShouldStoreInstancesCreatedForProperties()
         {
             var container = new SimpleInjector();
@@ -188,5 +199,10 @@ namespace ZooTest.Injector
 
     class Cat : Animal
     {
+    }
+
+    class ReadOnlyFoo
+    {
+        public Window Window { get; }
     }
 }

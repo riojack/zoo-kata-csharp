@@ -63,7 +63,10 @@ namespace Zoo.Injector
                     innerInstance = ConfigureNewInstance(propertyType, newInstancesAccumulator);
                 }
 
-                propertyInfo.SetMethod.Invoke(instance, new[] {innerInstance});
+                if (propertyInfo.CanWrite)
+                {
+                    propertyInfo.SetMethod.Invoke(instance, new[] {innerInstance});
+                }
             }
 
             newInstancesAccumulator.Add(instance);
