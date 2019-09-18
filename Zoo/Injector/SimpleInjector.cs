@@ -14,9 +14,10 @@ namespace Zoo.Injector
             return instance as T;
         }
 
-        public void Store<T>(T thingToStore) where T : class
+        public void Store<T>(T thingToStore, Type asType = null) where T : class
         {
-            var type = thingToStore.GetType();
+            var type = asType ?? thingToStore.GetType();
+
             InstanceMap.Add(type, thingToStore);
         }
 

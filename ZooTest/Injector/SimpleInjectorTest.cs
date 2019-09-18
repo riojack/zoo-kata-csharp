@@ -118,6 +118,19 @@ namespace ZooTest.Injector
         }
 
         [Fact]
+        public void ShouldStoreByTypeIfASpecificTypeIsProvided()
+        {
+            var container = new SimpleInjector();
+            Cat cat = new Cat();
+
+            container.Store(cat, typeof(Animal));
+
+            var catFromStore = container.FindByType<Animal>();
+
+            Assert.Same(cat, catFromStore);
+        }
+
+        [Fact]
         public void ShouldNotAutomaticallyConfigureDotNetTypedDependenciesIfNoMatchesAreAvailable()
         {
             var container = new SimpleInjector();
@@ -166,6 +179,14 @@ namespace ZooTest.Injector
     }
 
     class Window
+    {
+    }
+
+    class Animal
+    {
+    }
+
+    class Cat : Animal
     {
     }
 }
