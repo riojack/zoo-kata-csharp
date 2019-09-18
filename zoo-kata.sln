@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zoo", "Zoo\Zoo.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZooTest", "ZooTest\ZooTest.csproj", "{FBCCDA41-BD5C-4661-BE7D-74A54BFD7D74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZooIntegrationTest", "ZooIntegrationTest\ZooIntegrationTest.csproj", "{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +46,17 @@ Global
 		{FBCCDA41-BD5C-4661-BE7D-74A54BFD7D74}.Release|x64.Build.0 = Release|Any CPU
 		{FBCCDA41-BD5C-4661-BE7D-74A54BFD7D74}.Release|x86.ActiveCfg = Release|Any CPU
 		{FBCCDA41-BD5C-4661-BE7D-74A54BFD7D74}.Release|x86.Build.0 = Release|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Debug|x64.Build.0 = Debug|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Debug|x86.Build.0 = Debug|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Release|x64.ActiveCfg = Release|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Release|x64.Build.0 = Release|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Release|x86.ActiveCfg = Release|Any CPU
+		{7ED2AD52-DEC1-43D1-BA53-B9DC48CE2093}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
