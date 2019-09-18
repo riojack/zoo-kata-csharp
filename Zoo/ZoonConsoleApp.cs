@@ -2,7 +2,7 @@ using System;
 
 namespace Zoo
 {
-    public class Start
+    public static class ZooConsoleApp
     {
         public static void Main(string[] args)
         {

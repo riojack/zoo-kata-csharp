@@ -11,6 +11,10 @@ Can you clean it up?
 #### Requirements
 
 As a guest services agent<br />
+I want to list existing tickets<br />
+So that I can see whats guest will be visiting the zoo.
+
+As a guest services agent<br />
 I want to create a new ticket for a guest<br />
 So that the guest is able to validate at the front gate.
 
