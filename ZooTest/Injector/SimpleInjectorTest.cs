@@ -95,11 +95,11 @@ namespace ZooTest.Injector
         {
             var container = new SimpleInjector();
             var house = new House();
-            
+
             container.Store(house);
 
             var houseFromContainer = container.FindByType<House>();
-            
+
             Assert.NotNull(houseFromContainer);
             Assert.Null(house.Room);
         }
@@ -109,13 +109,33 @@ namespace ZooTest.Injector
         {
             var container = new SimpleInjector();
             var houses = new List<House> {new House(), new House(), new House()};
-            
+
             container.Store(houses);
 
             var housesFromStore = container.FindByType<List<House>>();
-            
+
             Assert.Same(houses, housesFromStore);
         }
+
+        [Fact]
+        public void ShouldConfigureTypesThatHaveCollectionDependencies()
+        {
+            var container = new SimpleInjector();
+            var houses = new List<House> {new House(), new House(), new House()};
+
+            container.Store(houses);
+
+            container.Configure<Block>();
+
+            var block = container.FindByType<Block>();
+
+            Assert.Same(houses, block.Houses);
+        }
+    }
+
+    class Block
+    {
+        public List<House> Houses { get; set; }
     }
 
     class House
