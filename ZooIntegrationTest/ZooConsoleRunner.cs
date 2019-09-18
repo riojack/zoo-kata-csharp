@@ -18,6 +18,7 @@ namespace ZooIntegrationTest
             var psi = new ProcessStartInfo
             {
                 RedirectStandardOutput = true,
+                RedirectStandardInput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 Arguments = $"run -p {path}",
