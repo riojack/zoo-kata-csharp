@@ -10,21 +10,22 @@ Can you clean it up?
 
 #### Requirements
 
-As a guest services agent
-I want to create a new ticket for a guest
+As a guest services agent<br />
+I want to create a new ticket for a guest<br />
 So that the guest is able to validate at the front gate.
 
-As a guest services agent
-I want to be able to remove a ticket
+As a guest services agent<br />
+I want to be able to remove a ticket<br />
 So that guests are able to cancel their attendance.
 
-As a guest services agent
-I want to be able to edit details of a ticket
-So that guests are able update blah blah blah
+As a guest services agent<br />
+I want to be able to edit details of a ticket<br />
+So that the guest's information stays up-to-date.
 
 ### Rules
 1. Behavior cannot change.
 2. Tests cannot be modified except for renames and moves.
+3. All tests must pass.
 
 ### Outcomes
 1. Code should be clear of SRP violations.
