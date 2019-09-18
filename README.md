@@ -33,3 +33,8 @@ So that the guest's information stays up-to-date.
 
 ### Outcomes
 1. Code should be clear of SRP violations.
+
+### Technical Notes
+Publish a self-contained binary on OSX Mojave: `dotnet publish Zoo -c release --self-contained --runtime osx.10.14-x64 --framework netcoreapp2.2`.
+
+Other runtimes: [RID Catalog](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog).
