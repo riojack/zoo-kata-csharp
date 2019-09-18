@@ -4,7 +4,7 @@ namespace Zoo
 {
     public static class ZooConsoleApp
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             Console.WriteLine("1. List Tickets");
             Console.WriteLine("2. Add Ticket");
