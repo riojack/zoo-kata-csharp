@@ -118,7 +118,19 @@ namespace ZooTest.Injector
         }
 
         [Fact]
-        public void ShouldConfigureTypesThatHaveCollectionDependencies()
+        public void ShouldNotAutomaticallyConfigureDotNetTypedDependenciesIfNoMatchesAreAvailable()
+        {
+            var container = new SimpleInjector();
+
+            container.Configure<Block>();
+
+            var block = container.FindByType<Block>();
+
+            Assert.Null(block.Houses);
+        }
+
+        [Fact]
+        public void ShouldConfigureDotNetTypesIfAndOnlyIfAMatchIsAvailable()
         {
             var container = new SimpleInjector();
             var houses = new List<House> {new House(), new House(), new House()};
@@ -130,18 +142,6 @@ namespace ZooTest.Injector
             var block = container.FindByType<Block>();
 
             Assert.Same(houses, block.Houses);
-        }
-
-        [Fact]
-        public void ShouldNotAutomaticallyConfigureDotNetTypedDependencies()
-        {
-            var container = new SimpleInjector();
-
-            container.Configure<Block>();
-
-            var block = container.FindByType<Block>();
-
-            Assert.Null(block.Houses);
         }
     }
 
