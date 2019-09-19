@@ -15,9 +15,11 @@ namespace Zoo.Ui
 
         public async Task StartInputOutputLoop()
         {
-            foreach (var screen in Screens)
+            var screenNames = Screens.Select((x, index) => $"{index + 1}. {x.Name}");
+
+            foreach (var screenName in screenNames)
             {
-                Out.WriteLine(screen.Name);
+                Out.WriteLine(screenName);
             }
         }
     }

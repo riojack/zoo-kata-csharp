@@ -46,13 +46,13 @@ namespace ZooTest.Ui
         }
 
         [Fact]
-        public void ShouldRenderAllScreenNamesToOutput()
+        public void ShouldRenderAllScreenNamesToOutputWithPrecedingNumber()
         {
             ScreenManager.StartInputOutputLoop();
 
-            MockTextWriter.Verify(x => x.WriteLine(ScreenNameOne), Times.Once);
-            MockTextWriter.Verify(x => x.WriteLine(ScreenNameTwo), Times.Once);
-            MockTextWriter.Verify(x => x.WriteLine(ScreenNameThree), Times.Once);
+            MockTextWriter.Verify(x => x.WriteLine($"1. {ScreenNameOne}"), Times.Once);
+            MockTextWriter.Verify(x => x.WriteLine($"2. {ScreenNameTwo}"), Times.Once);
+            MockTextWriter.Verify(x => x.WriteLine($"3. {ScreenNameThree}"), Times.Once);
         }
     }
 }
