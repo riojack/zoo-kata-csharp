@@ -13,7 +13,7 @@ namespace Zoo.Ui
         public TextWriter Out { get; set; }
         public TextReader In { get; set; }
 
-        public async Task Go()
+        public async Task StartInputOutputLoop()
         {
             foreach (var screen in Screens)
             {

@@ -36,7 +36,7 @@ namespace ZooTest.Ui
         [Fact]
         public void ShouldRenderAllScreenNamesToOutput()
         {
-            ScreenManager.Go();
+            ScreenManager.StartInputOutputLoop();
 
             MockTextWriter.Verify(x => x.WriteLine(ScreenName), Times.Once);
         }
