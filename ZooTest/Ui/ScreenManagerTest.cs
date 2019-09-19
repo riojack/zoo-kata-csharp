@@ -8,8 +8,9 @@ namespace ZooTest.Ui
 {
     public class ScreenManagerTest
     {
-        private const string ScreenName = "Test Screen 1";
-        private Mock<IScreen> MockScreen { get; set; }
+        private const string ScreenNameOne = "First Test Screen Name";
+        private const string ScreenNameTwo = "Second Test Screen Name";
+        private const string ScreenNameThree = "Third Test Screen Name";
 
         private Mock<TextWriter> MockTextWriter { get; set; }
 
@@ -19,15 +20,26 @@ namespace ZooTest.Ui
 
         public ScreenManagerTest()
         {
-            MockScreen = new Mock<IScreen>();
-            MockScreen.Setup(x => x.Name).Returns(ScreenName);
+            var firstMockScreen = new Mock<IScreen>();
+            firstMockScreen.Setup(x => x.Name).Returns(ScreenNameOne);
+
+            var secondMockScreen = new Mock<IScreen>();
+            secondMockScreen.Setup(x => x.Name).Returns(ScreenNameTwo);
+
+            var thirdMockScreen = new Mock<IScreen>();
+            thirdMockScreen.Setup(x => x.Name).Returns(ScreenNameThree);
 
             MockTextWriter = new Mock<TextWriter>();
             MockTextReader = new Mock<TextReader>();
 
             ScreenManager = new ScreenManager
             {
-                Screens = new List<IScreen> {MockScreen.Object},
+                Screens = new List<IScreen>
+                {
+                    firstMockScreen.Object,
+                    secondMockScreen.Object,
+                    thirdMockScreen.Object
+                },
                 Out = MockTextWriter.Object,
                 In = MockTextReader.Object
             };
@@ -38,7 +50,9 @@ namespace ZooTest.Ui
         {
             ScreenManager.StartInputOutputLoop();
 
-            MockTextWriter.Verify(x => x.WriteLine(ScreenName), Times.Once);
+            MockTextWriter.Verify(x => x.WriteLine(ScreenNameOne), Times.Once);
+            MockTextWriter.Verify(x => x.WriteLine(ScreenNameTwo), Times.Once);
+            MockTextWriter.Verify(x => x.WriteLine(ScreenNameThree), Times.Once);
         }
     }
 }
