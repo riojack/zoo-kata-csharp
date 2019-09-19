@@ -21,6 +21,13 @@ namespace Zoo.Ui
             {
                 Out.WriteLine(screenName);
             }
+
+            var selection = await In.ReadLineAsync();
+            var selectionAsNumber = int.Parse(selection) - 1;
+
+            var elementAt = Screens.ElementAt(selectionAsNumber);
+
+            await elementAt.Activated();
         }
     }
 }

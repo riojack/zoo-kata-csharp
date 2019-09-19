@@ -12,6 +12,8 @@ namespace ZooTest.Ui
         private const string ScreenNameTwo = "Second Test Screen Name";
         private const string ScreenNameThree = "Third Test Screen Name";
 
+        private Mock<IScreen> SecondMockScreen { get; }
+
         private Mock<TextWriter> MockTextWriter { get; set; }
 
         private Mock<TextReader> MockTextReader { get; set; }
@@ -23,21 +25,22 @@ namespace ZooTest.Ui
             var firstMockScreen = new Mock<IScreen>();
             firstMockScreen.Setup(x => x.Name).Returns(ScreenNameOne);
 
-            var secondMockScreen = new Mock<IScreen>();
-            secondMockScreen.Setup(x => x.Name).Returns(ScreenNameTwo);
+            SecondMockScreen = new Mock<IScreen>();
+            SecondMockScreen.Setup(x => x.Name).Returns(ScreenNameTwo);
 
             var thirdMockScreen = new Mock<IScreen>();
             thirdMockScreen.Setup(x => x.Name).Returns(ScreenNameThree);
 
             MockTextWriter = new Mock<TextWriter>();
             MockTextReader = new Mock<TextReader>();
+            MockTextReader.Setup(x => x.ReadLineAsync()).ReturnsAsync("2");
 
             ScreenManager = new ScreenManager
             {
                 Screens = new List<IScreen>
                 {
                     firstMockScreen.Object,
-                    secondMockScreen.Object,
+                    SecondMockScreen.Object,
                     thirdMockScreen.Object
                 },
                 Out = MockTextWriter.Object,
@@ -46,13 +49,21 @@ namespace ZooTest.Ui
         }
 
         [Fact]
-        public void ShouldRenderAllScreenNamesToOutputWithPrecedingNumber()
+        public async void ShouldRenderAllScreenNamesToOutputWithPrecedingNumber()
         {
-            ScreenManager.StartInputOutputLoop();
+            await ScreenManager.StartInputOutputLoop();
 
             MockTextWriter.Verify(x => x.WriteLine($"1. {ScreenNameOne}"), Times.Once);
             MockTextWriter.Verify(x => x.WriteLine($"2. {ScreenNameTwo}"), Times.Once);
             MockTextWriter.Verify(x => x.WriteLine($"3. {ScreenNameThree}"), Times.Once);
+        }
+
+        [Fact]
+        public async void ShouldCallActivateOnCorrectScreenWhenUserEntersNumber()
+        {
+            await ScreenManager.StartInputOutputLoop();
+
+            SecondMockScreen.Verify(x => x.Activated());
         }
     }
 }
