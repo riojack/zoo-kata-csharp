@@ -48,5 +48,20 @@ namespace ZooTest.Persistence
 
             Assert.Null(persistedTicket);
         }
+
+        [Fact]
+        public void ShouldFindReturnACopyOfTheTicket()
+        {
+            var ticket = new Ticket
+            {
+                AttendanceDate = "07/20/2019"
+            };
+
+            Dao.Save(ticket);
+
+            var persistedTicket = Dao.Find(ticket.Id);
+
+            Assert.NotSame(ticket, persistedTicket);
+        }
     }
 }

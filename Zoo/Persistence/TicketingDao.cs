@@ -21,7 +21,7 @@ namespace Zoo.Persistence
         {
             Tickets.TryGetValue(ticketId, out var ticket);
 
-            return ticket;
+            return ticket?.Clone() as Ticket;
         }
 
         public void Remove(string ticketId)
