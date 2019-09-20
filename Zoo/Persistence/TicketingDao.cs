@@ -24,8 +24,13 @@ namespace Zoo.Persistence
             return ticket?.Clone() as Ticket;
         }
 
-        public void Remove(string ticketId)
+        public Ticket Remove(string ticketId)
         {
+            var ticket = Find(ticketId);
+
+            Tickets.Remove(ticketId);
+
+            return ticket;
         }
     }
 }

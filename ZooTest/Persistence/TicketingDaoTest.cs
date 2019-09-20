@@ -79,5 +79,22 @@ namespace ZooTest.Persistence
 
             Assert.NotSame(ticketFromFirstFindCall, ticketFromSecondFindCall);
         }
+
+        [Fact]
+        public void ShouldRemoveATicketById()
+        {
+            var ticket = new Ticket
+            {
+                AttendanceDate = "07/20/2019"
+            };
+
+            Dao.Save(ticket);
+
+            Dao.Remove(ticket.Id);
+
+            var deletedTicket = Dao.Find(ticket.Id);
+
+            Assert.Null(deletedTicket);
+        }
     }
 }
