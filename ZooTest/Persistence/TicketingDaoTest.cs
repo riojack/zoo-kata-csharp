@@ -63,5 +63,21 @@ namespace ZooTest.Persistence
 
             Assert.NotSame(ticket, persistedTicket);
         }
+
+        [Fact]
+        public void ShouldFindReturnACopyOfTheTicketForEachFindOfTheSameTicketId()
+        {
+            var ticket = new Ticket
+            {
+                AttendanceDate = "07/20/2019"
+            };
+
+            Dao.Save(ticket);
+
+            var ticketFromFirstFindCall = Dao.Find(ticket.Id);
+            var ticketFromSecondFindCall = Dao.Find(ticket.Id);
+
+            Assert.NotSame(ticketFromFirstFindCall, ticketFromSecondFindCall);
+        }
     }
 }
