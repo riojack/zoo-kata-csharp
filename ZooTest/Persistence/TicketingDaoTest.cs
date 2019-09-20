@@ -40,5 +40,13 @@ namespace ZooTest.Persistence
 
             Assert.Equal(ticket, persistedTicket);
         }
+
+        [Fact]
+        public void ShouldReturnNullIfTicketIsNotFound()
+        {
+            var persistedTicket = Dao.Find("i-dont-exist");
+
+            Assert.Null(persistedTicket);
+        }
     }
 }
