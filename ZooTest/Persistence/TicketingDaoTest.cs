@@ -65,7 +65,7 @@ namespace ZooTest.Persistence
         }
 
         [Fact]
-        public void ShouldFindReturnACopyOfTheTicketForEachFindOfTheSameTicketId()
+        public void ShouldFindAndReturnACopyOfTheTicketForEachFindOfTheSameTicketId()
         {
             var ticket = new Ticket
             {
