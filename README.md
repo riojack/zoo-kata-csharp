@@ -26,6 +26,11 @@ As a guest services agent<br />
 I want to be able to edit details of a ticket<br />
 So that the guest's information stays up-to-date.
 
+Other considerations:
+  - The Zoo will sometimes run campaigns through third-party vendors
+  - Tickets can only be purchased with a credit or debit card.
+  - After purchase, tickets can be mailed, emailed, and/or sent to the guest via the Zoo's mobile app.
+
 ### Rules
 1. Behavior cannot change.
 2. Tests cannot be modified except for renames and moves.
