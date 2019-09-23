@@ -1,3 +1,4 @@
+using System;
 using Moq;
 using Xunit;
 using Zoo.Ui;
@@ -23,7 +24,7 @@ namespace ZooTest.Ui
         }
 
         [Fact]
-        public async void ShouldRenderExpectedInputLinesOnActivation()
+        public async void ShouldRenderExpectedInputLinesWithCorrectRightAlignmentOnActivation()
         {
             var expectedLines = new[]
             {
@@ -36,7 +37,8 @@ namespace ZooTest.Ui
 
             foreach (var expectedLine in expectedLines)
             {
-                MockConsoleWrapper.Verify(x => x.WriteLineAsync(expectedLine), Times.Once);
+                var withRightAlignment = $"{expectedLine,30}";
+                MockConsoleWrapper.Verify(x => x.WriteLineAsync(withRightAlignment), Times.Once);
             }
         }
     }

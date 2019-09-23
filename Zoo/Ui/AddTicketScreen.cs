@@ -6,7 +6,8 @@ namespace Zoo.Ui
 {
     public class AddTicketScreen : IScreen
     {
-        private string[] InputLines { get; } = {"Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: "};
+        private string[] InputLines { get; } =
+            {"Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: "};
 
         public string Name { get; } = "Add Ticket";
 
@@ -16,7 +17,8 @@ namespace Zoo.Ui
         {
             foreach (var inputLine in InputLines)
             {
-                await ConsoleWrapper.WriteLineAsync(inputLine);
+                var withRightAlignment = $"{inputLine,30}";
+                await ConsoleWrapper.WriteLineAsync(withRightAlignment);
             }
         }
     }
