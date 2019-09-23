@@ -1,20 +1,23 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
+using Zoo.Ui.Utilities;
 
 namespace Zoo.Ui
 {
     public class AddTicketScreen : IScreen
     {
+        private string[] InputLines { get; } = {"Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: "};
+
         public string Name { get; } = "Add Ticket";
 
-        public TextWriter Out { get; set; }
+        public ConsoleWrapper ConsoleWrapper { get; set; }
 
-        public TextReader In { get; set; }
-
-        public Task Activated()
+        public async Task Activated()
         {
-            throw new System.NotImplementedException();
+            foreach (var inputLine in InputLines)
+            {
+                await ConsoleWrapper.WriteLineAsync(inputLine);
+            }
         }
     }
 }
