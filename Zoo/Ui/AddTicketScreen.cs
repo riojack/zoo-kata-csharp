@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Zoo.Ui.Utilities;
 
@@ -19,6 +18,12 @@ namespace Zoo.Ui
             {
                 var withRightAlignment = $"{inputLine,30}";
                 await ConsoleWrapper.WriteLineAsync(withRightAlignment);
+            }
+
+            for (var lineNumber = 0; lineNumber < InputLines.Length; lineNumber++)
+            {
+                ConsoleWrapper.SetCursorPosition(32, lineNumber);
+                await ConsoleWrapper.ReadLineAsync();
             }
         }
     }
