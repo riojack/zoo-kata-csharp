@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Moq;
 using Xunit;
 using Zoo.Ui;
@@ -45,6 +46,14 @@ namespace ZooTest.Ui
         }
 
         [Fact]
+        public async void ShouldRenderAnOptionForQuitting()
+        {
+            await ScreenManager.StartInputOutputLoop();
+
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync("99. Quit"), Times.Once);
+        }
+
+        [Fact]
         public async void ShouldRenderAllScreenNamesToOutputWithPrecedingNumber()
         {
             await ScreenManager.StartInputOutputLoop();
@@ -55,20 +64,13 @@ namespace ZooTest.Ui
         }
 
         [Fact]
-        public async void ShouldRenderAnOptionForQuitting()
-        {
-            await ScreenManager.StartInputOutputLoop();
-
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync("99. Quit"), Times.Once);
-        }
-
-        [Fact]
         public async void ShouldClearScreenAndCallActivateOnCorrectScreenWhenUserEntersNumber()
         {
             var callOrder = 0;
 
             MockConsoleWrapper.Setup(x => x.ClearScreen()).Callback(() => Assert.Equal(0, callOrder++));
-            SecondMockScreen.Setup(x => x.Activated()).Callback(() => Assert.Equal(1, callOrder++));
+            SecondMockScreen.Setup(x => x.Activated()).Returns(Task.CompletedTask)
+                .Callback(() => Assert.Equal(1, callOrder++));
 
             await ScreenManager.StartInputOutputLoop();
 
