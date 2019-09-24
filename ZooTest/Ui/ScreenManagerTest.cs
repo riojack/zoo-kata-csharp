@@ -15,9 +15,9 @@ namespace ZooTest.Ui
 
         private Mock<IScreen> SecondMockScreen { get; }
 
-        private Mock<ConsoleWrapper> MockConsoleWrapper { get; set; }
+        private Mock<ConsoleWrapper> MockConsoleWrapper { get; }
 
-        private ScreenManager ScreenManager { get; set; }
+        private ScreenManager ScreenManager { get; }
 
         public ScreenManagerTest()
         {
@@ -31,7 +31,8 @@ namespace ZooTest.Ui
             thirdMockScreen.Setup(x => x.Name).Returns(ScreenNameThree);
 
             MockConsoleWrapper = new Mock<ConsoleWrapper>();
-            MockConsoleWrapper.Setup(x => x.ReadLineAsync()).ReturnsAsync("2");
+            MockConsoleWrapper.Setup(x => x.ReadLineAsync()).ReturnsAsync("99");
+            MockConsoleWrapper.Setup(x => x.WriteLineAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
 
             ScreenManager = new ScreenManager
             {
@@ -54,23 +55,21 @@ namespace ZooTest.Ui
         }
 
         [Fact]
-        public async void ShouldRenderAllScreenNamesToOutputWithPrecedingNumber()
+        public async void ShouldClearScreenAndRenderMenu()
         {
             await ScreenManager.StartInputOutputLoop();
 
+            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.Once);
             MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Once);
             MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Once);
             MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Once);
         }
 
         [Fact]
-        public async void ShouldClearScreenAndCallActivateOnCorrectScreenWhenUserEntersNumber()
+        public async void ShouldCallActivateOnCorrectScreenWhenUserEntersNumber()
         {
-            var callOrder = 0;
-
-            MockConsoleWrapper.Setup(x => x.ClearScreen()).Callback(() => Assert.Equal(0, callOrder++));
-            SecondMockScreen.Setup(x => x.Activated()).Returns(Task.CompletedTask)
-                .Callback(() => Assert.Equal(1, callOrder++));
+            MockConsoleWrapper.Setup(x => x.ReadLineAsync()).ReturnsAsync("2");
+            SecondMockScreen.Setup(x => x.Activated()).Returns(Task.CompletedTask);
 
             await ScreenManager.StartInputOutputLoop();
 

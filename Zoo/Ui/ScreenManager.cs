@@ -14,6 +14,7 @@ namespace Zoo.Ui
         public async Task StartInputOutputLoop()
         {
             var screenNames = Screens.Select((x, index) => $"{index + 1}. {x.Name}");
+            ConsoleWrapper.ClearScreen();
 
             foreach (var screenName in screenNames)
             {
@@ -33,7 +34,6 @@ namespace Zoo.Ui
 
             var elementAt = Screens.ElementAt(selectionAsNumber);
 
-            ConsoleWrapper.ClearScreen();
             await elementAt.Activated();
         }
     }
