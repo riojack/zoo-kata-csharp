@@ -59,12 +59,17 @@ namespace ZooTest.Ui
         {
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"99. Quit"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync("99. Quit"), Times.Once);
         }
 
         [Fact]
-        public async void ShouldCallActivateOnCorrectScreenWhenUserEntersNumber()
+        public async void ShouldClearScreenAndCallActivateOnCorrectScreenWhenUserEntersNumber()
         {
+            var callOrder = 0;
+
+            MockConsoleWrapper.Setup(x => x.ClearScreen()).Callback(() => Assert.Equal(0, callOrder++));
+            SecondMockScreen.Setup(x => x.Activated()).Callback(() => Assert.Equal(1, callOrder++));
+
             await ScreenManager.StartInputOutputLoop();
 
             SecondMockScreen.Verify(x => x.Activated());

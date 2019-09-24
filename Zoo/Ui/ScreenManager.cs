@@ -33,6 +33,7 @@ namespace Zoo.Ui
 
             var elementAt = Screens.ElementAt(selectionAsNumber);
 
+            ConsoleWrapper.ClearScreen();
             await elementAt.Activated();
         }
     }

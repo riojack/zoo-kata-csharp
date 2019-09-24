@@ -19,5 +19,10 @@ namespace Zoo.Ui.Utilities
         {
             Console.SetCursorPosition(left, top);
         }
+
+        public virtual void ClearScreen()
+        {
+            Console.Clear();
+        }
     }
 }
