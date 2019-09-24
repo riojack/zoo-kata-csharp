@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
+using Zoo.Injector;
+using Zoo.Ui;
 
 namespace Zoo
 {
@@ -6,10 +10,28 @@ namespace Zoo
     {
         public static void Main()
         {
-            Console.WriteLine("1. List Tickets");
-            Console.WriteLine("2. Add Ticket");
-            Console.WriteLine("3. Edit Ticket");
-            Console.WriteLine("4. Remove Ticket");
+            SimpleInjector injector = new SimpleInjector();
+
+            injector.Store(Console.Out, typeof(TextWriter));
+            injector.Store(Console.In, typeof(TextReader));
+
+            injector.Configure<ListTicketsScreen>();
+            injector.Configure<AddTicketScreen>();
+            injector.Configure<EditTicketScreen>();
+            injector.Configure<RemoveTicketScreen>();
+
+            injector.Store(new List<IScreen>
+            {
+                injector.FindByType<ListTicketsScreen>(),
+                injector.FindByType<AddTicketScreen>(),
+                injector.FindByType<EditTicketScreen>(),
+                injector.FindByType<RemoveTicketScreen>()
+            }, typeof(ICollection<IScreen>));
+
+            injector.Configure<ScreenManager>();
+
+            var screenManager = injector.FindByType<ScreenManager>();
+            screenManager.StartInputOutputLoop().Wait();
         }
     }
 }

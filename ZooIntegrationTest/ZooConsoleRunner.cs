@@ -32,7 +32,7 @@ namespace ZooIntegrationTest
         {
             if (!ZooConsoleApp.HasExited)
             {
-                ZooConsoleApp.Kill();
+                ZooConsoleApp.CloseMainWindow();
             }
         }
 
@@ -41,7 +41,7 @@ namespace ZooIntegrationTest
             return await ZooConsoleApp.StandardOutput.ReadLineAsync();
         }
 
-        public async void WriteLineAsync(string lineToWrite)
+        public async Task WriteLineAsync(string lineToWrite)
         {
             await ZooConsoleApp.StandardInput.WriteLineAsync(lineToWrite);
         }

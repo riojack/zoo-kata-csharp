@@ -22,7 +22,15 @@ namespace Zoo.Ui
                 Out.WriteLine(screenName);
             }
 
+            Out.WriteLine("99. Quit");
+
             var selection = await In.ReadLineAsync();
+
+            if (selection == "99")
+            {
+                return;
+            }
+
             var selectionAsNumber = int.Parse(selection) - 1;
 
             var elementAt = Screens.ElementAt(selectionAsNumber);
