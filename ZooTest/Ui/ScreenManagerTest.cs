@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using System.IO;
 using Moq;
 using Xunit;
 using Zoo.Ui;
+using Zoo.Ui.Utilities;
 
 namespace ZooTest.Ui
 {
@@ -14,9 +14,7 @@ namespace ZooTest.Ui
 
         private Mock<IScreen> SecondMockScreen { get; }
 
-        private Mock<TextWriter> MockTextWriter { get; set; }
-
-        private Mock<TextReader> MockTextReader { get; set; }
+        private Mock<ConsoleWrapper> MockConsoleWrapper { get; set; }
 
         private ScreenManager ScreenManager { get; set; }
 
@@ -31,9 +29,8 @@ namespace ZooTest.Ui
             var thirdMockScreen = new Mock<IScreen>();
             thirdMockScreen.Setup(x => x.Name).Returns(ScreenNameThree);
 
-            MockTextWriter = new Mock<TextWriter>();
-            MockTextReader = new Mock<TextReader>();
-            MockTextReader.Setup(x => x.ReadLineAsync()).ReturnsAsync("2");
+            MockConsoleWrapper = new Mock<ConsoleWrapper>();
+            MockConsoleWrapper.Setup(x => x.ReadLineAsync()).ReturnsAsync("2");
 
             ScreenManager = new ScreenManager
             {
@@ -43,8 +40,7 @@ namespace ZooTest.Ui
                     SecondMockScreen.Object,
                     thirdMockScreen.Object
                 },
-                Out = MockTextWriter.Object,
-                In = MockTextReader.Object
+                ConsoleWrapper = MockConsoleWrapper.Object
             };
         }
 
@@ -53,9 +49,9 @@ namespace ZooTest.Ui
         {
             await ScreenManager.StartInputOutputLoop();
 
-            MockTextWriter.Verify(x => x.WriteLine($"1. {ScreenNameOne}"), Times.Once);
-            MockTextWriter.Verify(x => x.WriteLine($"2. {ScreenNameTwo}"), Times.Once);
-            MockTextWriter.Verify(x => x.WriteLine($"3. {ScreenNameThree}"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Once);
         }
 
         [Fact]
@@ -63,7 +59,7 @@ namespace ZooTest.Ui
         {
             await ScreenManager.StartInputOutputLoop();
 
-            MockTextWriter.Verify(x => x.WriteLine($"99. Quit"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"99. Quit"), Times.Once);
         }
 
         [Fact]

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Zoo.Ui.Utilities;
 
 namespace Zoo.Ui
 {
@@ -9,8 +9,7 @@ namespace Zoo.Ui
     {
         public ICollection<IScreen> Screens { get; set; }
 
-        public TextWriter Out { get; set; }
-        public TextReader In { get; set; }
+        public ConsoleWrapper ConsoleWrapper { get; set; }
 
         public async Task StartInputOutputLoop()
         {
@@ -18,12 +17,12 @@ namespace Zoo.Ui
 
             foreach (var screenName in screenNames)
             {
-                Out.WriteLine(screenName);
+                await ConsoleWrapper.WriteLineAsync(screenName);
             }
 
-            Out.WriteLine("99. Quit");
+            await ConsoleWrapper.WriteLineAsync("99. Quit");
 
-            var selection = await In.ReadLineAsync();
+            var selection = await ConsoleWrapper.ReadLineAsync();
 
             if (selection == "99")
             {
