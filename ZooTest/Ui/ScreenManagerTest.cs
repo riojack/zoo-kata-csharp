@@ -59,6 +59,14 @@ namespace ZooTest.Ui
         }
 
         [Fact]
+        public async void ShouldRenderAnOptionForQuitting()
+        {
+            await ScreenManager.StartInputOutputLoop();
+
+            MockTextWriter.Verify(x => x.WriteLine($"99. Quit"), Times.Once);
+        }
+
+        [Fact]
         public async void ShouldCallActivateOnCorrectScreenWhenUserEntersNumber()
         {
             await ScreenManager.StartInputOutputLoop();
