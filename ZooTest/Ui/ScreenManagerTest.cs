@@ -117,5 +117,21 @@ namespace ZooTest.Ui
             MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(2));
             MockConsoleWrapper.Verify(x => x.WriteLineAsync("Selection out of range.  Please select an option."));
         }
+
+        [Fact]
+        public async void ShouldRenderErrorMessageAndRenderTheMenuAgainIfNumberEnteredIsLessThanZero()
+        {
+            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
+                .ReturnsAsync("-1213")
+                .ReturnsAsync("99");
+
+            await ScreenManager.StartInputOutputLoop();
+
+            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeast(3));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Exactly(2));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Exactly(2));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(2));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync("Selection out of range.  Please select an option."));
+        }
     }
 }
