@@ -83,5 +83,21 @@ namespace ZooTest.Ui
 
             SecondMockScreen.Verify(x => x.Activated());
         }
+
+        [Fact]
+        public async void ShouldRenderErrorMessageAndRenderTheMenuAgainIfNumberEnteredIsTooLarge()
+        {
+            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
+                .ReturnsAsync("98324")
+                .ReturnsAsync("99");
+
+            await ScreenManager.StartInputOutputLoop();
+
+            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeast(3));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Exactly(2));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Exactly(2));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(2));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync("Selection out of range.  Please select an option."));
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,6 +14,15 @@ namespace Zoo.Ui
 
         public async Task StartInputOutputLoop()
         {
+            var errorToRender = String.Empty;
+            while (errorToRender != "quit")
+            {
+                errorToRender = await Foo(errorToRender);
+            }
+        }
+
+        private async Task<string> Foo(string errorToRender)
+        {
             var screenNames = Screens.Select((x, index) => $"{index + 1}. {x.Name}");
             ConsoleWrapper.ClearScreen();
 
@@ -23,19 +33,32 @@ namespace Zoo.Ui
 
             await ConsoleWrapper.WriteLineAsync("99. Quit");
 
+            if (!String.IsNullOrEmpty(errorToRender))
+            {
+                await ConsoleWrapper.WriteLineAsync(String.Empty);
+                await ConsoleWrapper.WriteLineAsync(errorToRender);
+            }
+
             var selection = await ConsoleWrapper.ReadLineAsync();
 
             if (selection == "99")
             {
                 ConsoleWrapper.ClearScreen();
-                return;
+                return "quit";
             }
 
             var selectionAsNumber = int.Parse(selection) - 1;
 
+            if (selectionAsNumber >= Screens.Count)
+            {
+                return "Selection out of range.  Please select an option.";
+            }
+
             var elementAt = Screens.ElementAt(selectionAsNumber);
 
             await elementAt.Activated();
+
+            return String.Empty;
         }
     }
 }
