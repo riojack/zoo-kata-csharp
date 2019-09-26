@@ -9,6 +9,9 @@ namespace ZooTest.Ui
 {
     public class ScreenManagerTest
     {
+        private const int Once = 1;
+        private const int Twice = 2;
+        private const int Thrice = 3;
         private const string ScreenNameOne = "First Test Screen Name";
         private const string ScreenNameTwo = "Second Test Screen Name";
         private const string ScreenNameThree = "Third Test Screen Name";
@@ -51,10 +54,8 @@ namespace ZooTest.Ui
         {
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeastOnce);
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Once);
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Once);
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Once);
+            VerifyScreenIsCleared(Twice);
+            VerifyMenuIsRendered(Once);
         }
 
         [Fact]
@@ -70,15 +71,14 @@ namespace ZooTest.Ui
         {
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.Exactly(2));
+            VerifyScreenIsCleared(Twice);
         }
 
         [Fact]
         public async void ShouldCallActivateOnCorrectScreenWhenUserEntersNumber()
         {
-            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
-                .ReturnsAsync("2")
-                .ReturnsAsync("99");
+            SetUpMenuSelectionThenQuit("2");
+
             SecondMockScreen.Setup(x => x.Activated()).Returns(Task.CompletedTask);
 
             await ScreenManager.StartInputOutputLoop();
@@ -89,65 +89,67 @@ namespace ZooTest.Ui
         [Fact]
         public async void ShouldRenderErrorMessageAndRenderTheMenuAgainIfNumberEnteredIsTooLarge()
         {
-            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
-                .ReturnsAsync("98324")
-                .ReturnsAsync("99");
+            SetUpMenuSelectionThenQuit("98324");
 
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeast(3));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(2));
+            VerifyScreenIsCleared(Thrice);
+            VerifyMenuIsRendered(Twice);
             MockConsoleWrapper.Verify(x => x.WriteLineAsync("Selection out of range.  Please select an option."));
         }
 
         [Fact]
         public async void ShouldRenderErrorMessageAndRenderTheMenuAgainIfNumberEnteredIsZero()
         {
-            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
-                .ReturnsAsync("0")
-                .ReturnsAsync("99");
+            SetUpMenuSelectionThenQuit("0");
 
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeast(3));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(2));
+            VerifyScreenIsCleared(Thrice);
+            VerifyMenuIsRendered(Twice);
             MockConsoleWrapper.Verify(x => x.WriteLineAsync("Selection out of range.  Please select an option."));
         }
 
         [Fact]
         public async void ShouldRenderErrorMessageAndRenderTheMenuAgainIfNumberEnteredIsLessThanZero()
         {
-            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
-                .ReturnsAsync("-1213")
-                .ReturnsAsync("99");
+            SetUpMenuSelectionThenQuit("-1213");
 
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeast(3));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(2));
+            VerifyScreenIsCleared(Thrice);
+            VerifyMenuIsRendered(Twice);
             MockConsoleWrapper.Verify(x => x.WriteLineAsync("Selection out of range.  Please select an option."));
         }
 
         [Fact]
         public async void ShouldRenderErrorMessageAndRenderTheMenuAgainIfNumberEnteredIsNotANumber()
         {
-            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
-                .ReturnsAsync("12AlphaBravo")
-                .ReturnsAsync("99");
+            SetUpMenuSelectionThenQuit("12AlphaBravo");
 
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeast(3));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Exactly(2));
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(2));
+            VerifyMenuIsRendered(Twice);
             MockConsoleWrapper.Verify(x => x.WriteLineAsync("Selection is invalid.  Please select an option."));
+        }
+
+        private void VerifyMenuIsRendered(int count)
+        {
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Exactly(count));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Exactly(count));
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Exactly(count));
+        }
+
+        private void VerifyScreenIsCleared(int count)
+        {
+            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.Exactly(count));
+        }
+
+        private void SetUpMenuSelectionThenQuit(string selection)
+        {
+            MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
+                .ReturnsAsync(selection)
+                .ReturnsAsync("99");
         }
     }
 }
