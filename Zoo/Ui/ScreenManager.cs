@@ -27,6 +27,7 @@ namespace Zoo.Ui
 
             if (selection == "99")
             {
+                ConsoleWrapper.ClearScreen();
                 return;
             }
 

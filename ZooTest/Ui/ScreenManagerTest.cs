@@ -47,6 +47,17 @@ namespace ZooTest.Ui
         }
 
         [Fact]
+        public async void ShouldClearScreenAndRenderMenu()
+        {
+            await ScreenManager.StartInputOutputLoop();
+
+            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeastOnce);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Once);
+        }
+
+        [Fact]
         public async void ShouldRenderAnOptionForQuitting()
         {
             await ScreenManager.StartInputOutputLoop();
@@ -55,14 +66,11 @@ namespace ZooTest.Ui
         }
 
         [Fact]
-        public async void ShouldClearScreenAndRenderMenu()
+        public async void ShouldClearScreenBeforeQuitting()
         {
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.Once);
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"1. {ScreenNameOne}"), Times.Once);
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"2. {ScreenNameTwo}"), Times.Once);
-            MockConsoleWrapper.Verify(x => x.WriteLineAsync($"3. {ScreenNameThree}"), Times.Once);
+            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeastOnce);
         }
 
         [Fact]
