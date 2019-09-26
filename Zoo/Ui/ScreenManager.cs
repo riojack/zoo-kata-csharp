@@ -15,7 +15,7 @@ namespace Zoo.Ui
         public async Task StartInputOutputLoop()
         {
             var errorToRender = String.Empty;
-            while (errorToRender != "quit")
+            while (errorToRender != ScreenCommands.Quit)
             {
                 errorToRender = await Foo(errorToRender);
             }
@@ -44,7 +44,7 @@ namespace Zoo.Ui
             if (selection == "99")
             {
                 ConsoleWrapper.ClearScreen();
-                return "quit";
+                return ScreenCommands.Quit;
             }
 
             var selectionAsNumber = int.Parse(selection) - 1;
@@ -60,5 +60,10 @@ namespace Zoo.Ui
 
             return String.Empty;
         }
+    }
+
+    public static class ScreenCommands
+    {
+        public const string Quit = "QUIT";
     }
 }
