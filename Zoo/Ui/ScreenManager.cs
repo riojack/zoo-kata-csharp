@@ -47,14 +47,18 @@ namespace Zoo.Ui
                 return ScreenCommands.Quit;
             }
 
-            var selectionAsNumber = int.Parse(selection) - 1;
+            if (!int.TryParse(selection, out var selectionAsNumber))
+            {
+                return "Selection is invalid.  Please select an option.";
+            }
 
-            if (selectionAsNumber <= -1 || selectionAsNumber >= Screens.Count)
+            if (selectionAsNumber <= 0 || selectionAsNumber >= Screens.Count)
             {
                 return "Selection out of range.  Please select an option.";
             }
 
-            var elementAt = Screens.ElementAt(selectionAsNumber);
+            var indexOfSelection = selectionAsNumber - 1;
+            var elementAt = Screens.ElementAt(indexOfSelection);
 
             await elementAt.Activated();
 
