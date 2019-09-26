@@ -49,7 +49,7 @@ namespace Zoo.Ui
 
             var selectionAsNumber = int.Parse(selection) - 1;
 
-            if (selectionAsNumber >= Screens.Count)
+            if (selectionAsNumber >= Screens.Count || selectionAsNumber == -1)
             {
                 return "Selection out of range.  Please select an option.";
             }
