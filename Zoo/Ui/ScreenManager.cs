@@ -15,16 +15,34 @@ namespace Zoo.Ui
         public async Task StartInputOutputLoop()
         {
             var errorToRender = String.Empty;
-            while (errorToRender != ScreenCommands.Quit)
+            while (true)
             {
-                errorToRender = await Foo(errorToRender);
+                ConsoleWrapper.ClearScreen();
+                await RenderMenu();
+                await RenderError(errorToRender);
+
+                var selection = await ConsoleWrapper.ReadLineAsync();
+
+                if (ShouldQuit(selection))
+                {
+                    ConsoleWrapper.ClearScreen();
+                    break;
+                }
+
+                errorToRender = SelectionValidation(selection);
+
+                if (!string.IsNullOrEmpty(errorToRender))
+                {
+                    continue;
+                }
+
+                await RenderSelectedScreen(selection);
             }
         }
 
-        private async Task<string> Foo(string errorToRender)
+        private async Task RenderMenu()
         {
             var screenNames = Screens.Select((x, index) => $"{index + 1}. {x.Name}");
-            ConsoleWrapper.ClearScreen();
 
             foreach (var screenName in screenNames)
             {
@@ -32,21 +50,24 @@ namespace Zoo.Ui
             }
 
             await ConsoleWrapper.WriteLineAsync("99. Quit");
+        }
 
+        private async Task RenderError(string errorToRender)
+        {
             if (!String.IsNullOrEmpty(errorToRender))
             {
                 await ConsoleWrapper.WriteLineAsync(String.Empty);
                 await ConsoleWrapper.WriteLineAsync(errorToRender);
             }
+        }
 
-            var selection = await ConsoleWrapper.ReadLineAsync();
+        private bool ShouldQuit(string selection)
+        {
+            return selection == "99";
+        }
 
-            if (selection == "99")
-            {
-                ConsoleWrapper.ClearScreen();
-                return ScreenCommands.Quit;
-            }
-
+        private string SelectionValidation(string selection)
+        {
             if (!int.TryParse(selection, out var selectionAsNumber))
             {
                 return "Selection is invalid.  Please select an option.";
@@ -57,17 +78,18 @@ namespace Zoo.Ui
                 return "Selection out of range.  Please select an option.";
             }
 
-            var indexOfSelection = selectionAsNumber - 1;
-            var elementAt = Screens.ElementAt(indexOfSelection);
-
-            await elementAt.Activated();
-
-            return String.Empty;
+            return "";
         }
-    }
 
-    public static class ScreenCommands
-    {
-        public const string Quit = "QUIT";
+        private async Task RenderSelectedScreen(string selection)
+        {
+            ConsoleWrapper.ClearScreen();
+            int.TryParse(selection, out var selectionAsNumber);
+
+            var indexOfSelection = selectionAsNumber - 1;
+            var screenToActivate = Screens.ElementAt(indexOfSelection);
+
+            await screenToActivate.Activated();
+        }
     }
 }

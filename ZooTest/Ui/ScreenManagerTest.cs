@@ -70,7 +70,7 @@ namespace ZooTest.Ui
         {
             await ScreenManager.StartInputOutputLoop();
 
-            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.AtLeastOnce);
+            MockConsoleWrapper.Verify(x => x.ClearScreen(), Times.Exactly(2));
         }
 
         [Fact]
