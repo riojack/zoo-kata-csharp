@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
+using Zoo.Service;
 using Zoo.Ui.Utilities;
+using Zoo.Ui.ViewModels;
 
 namespace Zoo.Ui
 {
@@ -15,6 +17,8 @@ namespace Zoo.Ui
 
         public ConsoleWrapper ConsoleWrapper { get; set; }
 
+        public ZooService Service { get; set; }
+
         public async Task Activated()
         {
             foreach (var inputLine in InputLines)
@@ -28,6 +32,18 @@ namespace Zoo.Ui
                 ConsoleWrapper.SetCursorPosition(32, lineNumber);
                 await ConsoleWrapper.ReadLineAsync();
             }
+
+            Service.SaveNewTicket(new NewTicketViewModel
+            {
+                GuestName = "Mr. Guest Name",
+                GuestPhone = "555-555-5555",
+                GuestMailingAddress = "12345 Somewhere USA",
+                DateAttending = "12/12/2100",
+                CardNumber = "1234 5678 9100 0000",
+                CardExpirationDate = "01/01/2120",
+                CardVerificationValue = "123"
+            });
+
         }
     }
 }
