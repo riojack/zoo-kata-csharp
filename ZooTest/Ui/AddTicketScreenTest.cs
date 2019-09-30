@@ -13,26 +13,25 @@ namespace ZooTest.Ui
         };
 
         private Mock<ConsoleWrapper> MockConsoleWrapper { get; set; }
+        private AddTicketScreen Screen { get; set; }
 
         public AddTicketScreenTest()
         {
             MockConsoleWrapper = new Mock<ConsoleWrapper>();
+
+            Screen = new AddTicketScreen {ConsoleWrapper = MockConsoleWrapper.Object};
         }
 
         [Fact]
         public void ShouldBeNamed()
         {
-            var screen = new AddTicketScreen();
-
-            Assert.Equal("Add Ticket", screen.Name);
+            Assert.Equal("Add Ticket", Screen.Name);
         }
 
         [Fact]
         public async void ShouldRenderExpectedInputLinesWithCorrectRightAlignmentOnActivation()
         {
-            var screen = new AddTicketScreen {ConsoleWrapper = MockConsoleWrapper.Object};
-
-            await screen.Activated();
+            await Screen.Activated();
 
             foreach (var expectedLine in ExpectedLines)
             {
@@ -45,9 +44,8 @@ namespace ZooTest.Ui
         public async void ShouldWaitForInputAtEachLineRendered()
         {
             MockConsoleWrapper.Setup(x => x.ReadLineAsync()).ReturnsAsync("abc");
-            var screen = new AddTicketScreen {ConsoleWrapper = MockConsoleWrapper.Object};
 
-            await screen.Activated();
+            await Screen.Activated();
 
             for (var lineNumber = 0; lineNumber < ExpectedLines.Length; lineNumber++)
             {
