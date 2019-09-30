@@ -9,7 +9,8 @@ namespace ZooTest.Ui
     {
         private string[] ExpectedLines { get; } =
         {
-            "Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: "
+            "Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: ",
+            "Card Expiration: ", "CVV: "
         };
 
         private Mock<ConsoleWrapper> MockConsoleWrapper { get; set; }
@@ -19,7 +20,6 @@ namespace ZooTest.Ui
         {
             MockConsoleWrapper = new Mock<ConsoleWrapper>();
 
-            Screen = new AddTicketScreen {ConsoleWrapper = MockConsoleWrapper.Object};
         }
 
         [Fact]

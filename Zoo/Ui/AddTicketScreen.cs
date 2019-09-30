@@ -6,7 +6,10 @@ namespace Zoo.Ui
     public class AddTicketScreen : IScreen
     {
         private string[] InputLines { get; } =
-            {"Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: "};
+        {
+            "Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: ",
+            "Card Expiration: ", "CVV: "
+        };
 
         public string Name { get; } = "Add Ticket";
 
