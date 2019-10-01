@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using Zoo.Ui.ViewModels;
+
+namespace Zoo.Ui.AddTicket
+{
+    public class TicketFieldConverter
+    {
+        private readonly IDictionary<string, Action<NewTicketViewModel, string>> _conversionMap =
+            new Dictionary<string, Action<NewTicketViewModel, string>>
+            {
+                {
+                    "Guest's Name: ",
+                    (model, value) => { model.GuestName = value; }
+                },
+                {
+                    "Guest's Phone: ",
+                    (model, value) => { model.GuestPhone = value; }
+                },
+                {
+                    "Guest's Mailing Address: ",
+                    (model, value) => { model.GuestMailingAddress = value; }
+                },
+                {
+                    "Date Attending: ",
+                    (model, value) => { model.DateAttending = value; }
+                },
+                {
+                    "Card Number: ",
+                    (model, value) => { model.CardNumber = value; }
+                },
+                {
+                    "Card Expiration: ",
+                    (model, value) => { model.CardExpirationDate = value; }
+                },
+                {
+                    "CVV: ",
+                    (model, value) => { model.CardVerificationValue = value; }
+                }
+            };
+
+        public IEnumerable<string> FieldDisplayText => _conversionMap.Keys;
+
+        public NewTicketViewModel ConvertInputToModel(IDictionary<string, string> fieldValues)
+        {
+            var model = new NewTicketViewModel();
+
+            foreach (var fieldKeyValue in fieldValues)
+            {
+                var mutatorFunc = _conversionMap[fieldKeyValue.Key];
+
+                mutatorFunc(model, fieldKeyValue.Value);
+            }
+
+            return model;
+        }
+    }
+}

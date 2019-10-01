@@ -3,6 +3,7 @@ using Moq;
 using Xunit;
 using Zoo.Service;
 using Zoo.Ui;
+using Zoo.Ui.AddTicket;
 using Zoo.Ui.Utilities;
 using Zoo.Ui.ViewModels;
 
@@ -29,7 +30,8 @@ namespace ZooTest.Ui
             Screen = new AddTicketScreen
             {
                 ConsoleWrapper = MockConsoleWrapper.Object,
-                Service = MockZooService.Object
+                Service = MockZooService.Object,
+                Converter =  new TicketFieldConverter()
             };
         }
 
