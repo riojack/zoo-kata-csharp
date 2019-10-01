@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Zoo.Service;
 using Zoo.Ui.Utilities;
@@ -7,11 +10,31 @@ namespace Zoo.Ui
 {
     public class AddTicketScreen : IScreen
     {
-        private string[] InputLines { get; } =
-        {
-            "Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: ",
-            "Card Expiration: ", "CVV: "
-        };
+        private IDictionary<string, Action<NewTicketViewModel, string>> InputLines { get; } =
+            new Dictionary<string, Action<NewTicketViewModel, string>>
+            {
+                {
+                    "Guest's Name: ", (model, value) => { model.GuestName = value; }
+                },
+                {
+                    "Guest's Phone: ", (model, value) => { model.GuestPhone = value; }
+                },
+                {
+                    "Guest's Mailing Address: ", (model, value) => { model.GuestMailingAddress = value; }
+                },
+                {
+                    "Date Attending: ", (model, value) => { model.DateAttending = value; }
+                },
+                {
+                    "Card Number: ", (model, value) => { model.CardNumber = value; }
+                },
+                {
+                    "Card Expiration: ", (model, value) => { model.CardExpirationDate = value; }
+                },
+                {
+                    "CVV: ", (model, value) => { model.CardVerificationValue = value; }
+                }
+            };
 
         public string Name { get; } = "Add Ticket";
 
@@ -23,27 +46,23 @@ namespace Zoo.Ui
         {
             foreach (var inputLine in InputLines)
             {
-                var withRightAlignment = $"{inputLine,30}";
+                var withRightAlignment = $"{inputLine.Key,30}";
                 await ConsoleWrapper.WriteLineAsync(withRightAlignment);
             }
 
-            for (var lineNumber = 0; lineNumber < InputLines.Length; lineNumber++)
+            var newTicket = new NewTicketViewModel();
+            for (var lineNumber = 0; lineNumber < InputLines.Count; lineNumber++)
             {
                 ConsoleWrapper.SetCursorPosition(32, lineNumber);
-                await ConsoleWrapper.ReadLineAsync();
+                var value = await ConsoleWrapper.ReadLineAsync();
+
+                var field = InputLines.ElementAt(lineNumber);
+                var setFunc = field.Value;
+
+                setFunc(newTicket, value);
             }
 
-            Service.SaveNewTicket(new NewTicketViewModel
-            {
-                GuestName = "Mr. Guest Name",
-                GuestPhone = "555-555-5555",
-                GuestMailingAddress = "12345 Somewhere USA",
-                DateAttending = "12/12/2100",
-                CardNumber = "1234 5678 9100 0000",
-                CardExpirationDate = "01/01/2120",
-                CardVerificationValue = "123"
-            });
-
+            Service.SaveNewTicket(newTicket);
         }
     }
 }

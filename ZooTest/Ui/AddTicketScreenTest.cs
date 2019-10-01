@@ -1,3 +1,4 @@
+using System;
 using Moq;
 using Xunit;
 using Zoo.Service;
@@ -67,9 +68,10 @@ namespace ZooTest.Ui
         [Fact]
         public async void ShouldSaveNewTicket()
         {
+            var guestName = Guid.NewGuid().ToString();
             var expectedNewTicketViewModel = new NewTicketViewModel
             {
-                GuestName = "Mr. Guest Name",
+                GuestName = guestName,
                 GuestPhone = "555-555-5555",
                 GuestMailingAddress = "12345 Somewhere USA",
                 DateAttending = "12/12/2100",
@@ -79,7 +81,7 @@ namespace ZooTest.Ui
             };
 
             MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
-                .ReturnsAsync("Mr. Guest Name")
+                .ReturnsAsync(guestName)
                 .ReturnsAsync("555-555-5555")
                 .ReturnsAsync("12345 Somewhere USA")
                 .ReturnsAsync("12/12/2100")
