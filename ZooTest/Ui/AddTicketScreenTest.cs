@@ -1,37 +1,40 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using Xunit;
 using Zoo.Service;
 using Zoo.Ui;
 using Zoo.Ui.AddTicket;
 using Zoo.Ui.Utilities;
-using Zoo.Ui.ViewModels;
 
 namespace ZooTest.Ui
 {
     public class AddTicketScreenTest
     {
-        private string[] ExpectedLines { get; } =
-        {
-            "Guest's Name: ", "Guest's Phone: ", "Guest's Mailing Address: ", "Date Attending: ", "Card Number: ",
-            "Card Expiration: ", "CVV: "
-        };
+        private Mock<ConsoleWrapper> MockConsoleWrapper { get; }
 
-        private Mock<ConsoleWrapper> MockConsoleWrapper { get; set; }
+        private Mock<ZooService> MockZooService { get; }
 
-        private Mock<ZooService> MockZooService { get; set; }
-        private AddTicketScreen Screen { get; set; }
+        private Mock<TicketFieldConverter> MockConverter { get; }
+
+        private AddTicketScreen Screen { get; }
+
+        private IEnumerable<string> DisplayNames { get; } = new[] {"Field 1", "Field 2", "Field 3"};
 
         public AddTicketScreenTest()
         {
             MockConsoleWrapper = new Mock<ConsoleWrapper>();
             MockZooService = new Mock<ZooService>();
+            MockConverter = new Mock<TicketFieldConverter>();
+
+            MockConverter.SetupGet(x => x.FieldDisplayNames).Returns(DisplayNames);
 
             Screen = new AddTicketScreen
             {
                 ConsoleWrapper = MockConsoleWrapper.Object,
                 Service = MockZooService.Object,
-                Converter =  new TicketFieldConverter()
+                Converter = MockConverter.Object
             };
         }
 
@@ -42,27 +45,16 @@ namespace ZooTest.Ui
         }
 
         [Fact]
-        public async void ShouldRenderExpectedInputLinesWithCorrectRightAlignmentOnActivation()
-        {
-            await Screen.Activated();
-
-            foreach (var expectedLine in ExpectedLines)
-            {
-                var withRightAlignment = $"{expectedLine,30}";
-                MockConsoleWrapper.Verify(x => x.WriteLineAsync(withRightAlignment), Times.Once);
-            }
-        }
-
-        [Fact]
         public async void ShouldWaitForInputAtEachLineRendered()
         {
             MockConsoleWrapper.Setup(x => x.ReadLineAsync()).ReturnsAsync("abc");
 
             await Screen.Activated();
 
-            for (var lineNumber = 0; lineNumber < ExpectedLines.Length; lineNumber++)
+            for (var lineNumber = 0; lineNumber < DisplayNames.Count(); lineNumber++)
             {
-                MockConsoleWrapper.Verify(x => x.SetCursorPosition(32, lineNumber));
+                var topPosition = lineNumber;
+                MockConsoleWrapper.Verify(x => x.SetCursorPosition(32, topPosition));
                 MockConsoleWrapper.Verify(x => x.ReadLineAsync());
             }
         }
@@ -71,33 +63,28 @@ namespace ZooTest.Ui
         public async void ShouldSaveNewTicket()
         {
             var guestName = Guid.NewGuid().ToString();
-            var expectedNewTicketViewModel = new NewTicketViewModel
-            {
-                GuestName = guestName,
-                GuestPhone = "555-555-5555",
-                GuestMailingAddress = "12345 Somewhere USA",
-                DateAttending = "12/12/2100",
-                CardNumber = "1234 5678 9100 0000",
-                CardExpirationDate = "01/01/2120",
-                CardVerificationValue = "123"
-            };
+            var guestPhone = "555-555-5555";
+            var guestAddress = "12345 Somewhere USA";
 
             MockConsoleWrapper.SetupSequence(x => x.ReadLineAsync())
                 .ReturnsAsync(guestName)
-                .ReturnsAsync("555-555-5555")
-                .ReturnsAsync("12345 Somewhere USA")
-                .ReturnsAsync("12/12/2100")
-                .ReturnsAsync("1234 5678 9100 0000")
-                .ReturnsAsync("01/01/2120")
-                .ReturnsAsync("123");
+                .ReturnsAsync(guestPhone)
+                .ReturnsAsync(guestAddress);
 
-            NewTicketViewModel capturedTicket = null;
-            MockZooService.Setup(x => x.SaveNewTicket(It.IsAny<NewTicketViewModel>()))
-                .Callback<NewTicketViewModel>(ticketVm => capturedTicket = ticketVm);
+            IDictionary<string, string> actualConvertInputToModelArgument = null;
+            MockConverter.Setup(x => x.ConvertInputToModel(It.IsAny<IDictionary<string, string>>()))
+                .Callback<IDictionary<string, string>>(x => actualConvertInputToModelArgument = x);
 
             await Screen.Activated();
 
-            Assert.Equal(expectedNewTicketViewModel, capturedTicket);
+            var expectedConvertInputToModelArgument = new Dictionary<string, string>
+            {
+                {"Field 1", guestName},
+                {"Field 2", guestPhone},
+                {"Field 3", guestAddress}
+            };
+
+            Assert.Equal(expectedConvertInputToModelArgument, actualConvertInputToModelArgument);
         }
     }
 }
