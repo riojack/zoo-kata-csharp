@@ -89,5 +89,28 @@ namespace ZooTest.Ui.AddTicket
 
             Assert.Equal(expectedModel, actualModel);
         }
+
+        [Fact]
+        public void ShouldStillMapEvenWithIrrelevantDisplayNamesInTheInputMap()
+        {
+            var inputMap = new Dictionary<string, string>
+            {
+                {
+                    "Guest's Name: ", "ABC"
+                },
+                {
+                    "Shirt Size: ", "XL"
+                }
+            };
+
+            var actualModel = Converter.ConvertInputToModel(inputMap);
+
+            var expectedModel = new NewTicketViewModel
+            {
+                GuestName = "ABC"
+            };
+
+            Assert.Equal(expectedModel, actualModel);
+        }
     }
 }

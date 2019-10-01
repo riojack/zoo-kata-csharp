@@ -47,12 +47,21 @@ namespace Zoo.Ui.AddTicket
 
             foreach (var (displayName, value) in displayNamesWithValues)
             {
-                var mutatorFunc = _conversionMap[displayName];
+                Action<NewTicketViewModel, string> mutatorFunc = NoOp;
+
+                if (_conversionMap.ContainsKey(displayName))
+                {
+                    mutatorFunc = _conversionMap[displayName];
+                }
 
                 mutatorFunc(model, value);
             }
 
             return model;
+        }
+
+        private void NoOp(NewTicketViewModel model, string value)
+        {
         }
     }
 }
