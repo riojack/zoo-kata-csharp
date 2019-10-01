@@ -45,11 +45,11 @@ namespace Zoo.Ui.AddTicket
         {
             var model = new NewTicketViewModel();
 
-            foreach (var displayNameWithValue in displayNamesWithValues)
+            foreach (var (displayName, value) in displayNamesWithValues)
             {
-                var mutatorFunc = _conversionMap[displayNameWithValue.Key];
+                var mutatorFunc = _conversionMap[displayName];
 
-                mutatorFunc(model, displayNameWithValue.Value);
+                mutatorFunc(model, value);
             }
 
             return model;
