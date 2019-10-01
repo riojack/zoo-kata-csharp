@@ -69,5 +69,25 @@ namespace ZooTest.Ui.AddTicket
 
             Assert.Equal(expectedModel, actualModel);
         }
+
+        [Fact]
+        public void ShouldPartiallyBuildNewTicketViewModel()
+        {
+            var inputMap = new Dictionary<string, string>
+            {
+                {
+                    "Guest's Name: ", "ABC"
+                }
+            };
+
+            var actualModel = Converter.ConvertInputToModel(inputMap);
+
+            var expectedModel = new NewTicketViewModel
+            {
+                GuestName = "ABC"
+            };
+
+            Assert.Equal(expectedModel, actualModel);
+        }
     }
 }
