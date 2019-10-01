@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Zoo.Ui.ViewModels;
 
 namespace Zoo.Ui.AddTicket
@@ -45,23 +46,17 @@ namespace Zoo.Ui.AddTicket
         {
             var model = new NewTicketViewModel();
 
-            foreach (var (displayName, value) in displayNamesWithValues)
+            var cleanDisplayNamesWithValues = displayNamesWithValues
+                .Where(x => FieldDisplayNames.Contains(x.Key))
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var (displayName, value) in cleanDisplayNamesWithValues)
             {
-                Action<NewTicketViewModel, string> mutatorFunc = NoOp;
-
-                if (_conversionMap.ContainsKey(displayName))
-                {
-                    mutatorFunc = _conversionMap[displayName];
-                }
-
+                var mutatorFunc = _conversionMap[displayName];
                 mutatorFunc(model, value);
             }
 
             return model;
-        }
-
-        private void NoOp(NewTicketViewModel model, string value)
-        {
         }
     }
 }
