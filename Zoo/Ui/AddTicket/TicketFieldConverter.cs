@@ -43,7 +43,16 @@ namespace Zoo.Ui.AddTicket
 
         public virtual NewTicketViewModel ConvertInputToModel(IDictionary<string, string> displayNamesWithValues)
         {
-            return null;
+            var model = new NewTicketViewModel();
+
+            foreach (var displayNameWithValue in displayNamesWithValues)
+            {
+                var mutatorFunc = _conversionMap[displayNameWithValue.Key];
+
+                mutatorFunc(model, displayNameWithValue.Value);
+            }
+
+            return model;
         }
     }
 }

@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Xunit;
 using Zoo.Ui.AddTicket;
+using Zoo.Ui.ViewModels;
 
 namespace ZooTest.Ui.AddTicket
 {
@@ -22,6 +24,50 @@ namespace ZooTest.Ui.AddTicket
         public void ShouldProvideExpectedInputLinesWithCorrectRightAlignmentOnActivation()
         {
             Assert.Equal(ExpectedLines, Converter.FieldDisplayNames);
+        }
+
+        [Fact]
+        public void ShouldMapValuesStoredByDisplayNameIntoNewTicketViewModel()
+        {
+            var inputMap = new Dictionary<string, string>
+            {
+                {
+                    "Guest's Name: ", "ABC"
+                },
+                {
+                    "Guest's Phone: ", "123-456-7890"
+                },
+                {
+                    "Guest's Mailing Address: ", "DEF"
+                },
+                {
+                    "Date Attending: ", "12/12/1212"
+                },
+                {
+                    "Card Number: ", "GHI"
+                },
+                {
+                    "Card Expiration: ", "12/12"
+                },
+                {
+                    "CVV: ", "JKLMNOPQRS"
+                }
+            };
+
+            var actualModel = Converter.ConvertInputToModel(inputMap);
+
+            var expectedModel = new NewTicketViewModel
+            {
+                GuestName = "ABC",
+                GuestPhone = "123-456-7890",
+                GuestMailingAddress = "DEF",
+                DateAttending = "12/12/1212",
+                CardNumber = "GHI",
+                CardExpirationDate = "12/12",
+                CardVerificationValue = "JKLMNOPQRS"
+            };
+
+            Assert.Equal(expectedModel, actualModel);
         }
     }
 }
