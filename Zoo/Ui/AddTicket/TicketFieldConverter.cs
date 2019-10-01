@@ -39,17 +39,17 @@ namespace Zoo.Ui.AddTicket
                 }
             };
 
-        public IEnumerable<string> FieldDisplayText => _conversionMap.Keys;
+        public IEnumerable<string> FieldDisplayNames => _conversionMap.Keys;
 
-        public NewTicketViewModel ConvertInputToModel(IDictionary<string, string> fieldValues)
+        public NewTicketViewModel ConvertInputToModel(IDictionary<string, string> displayNamesWithValues)
         {
             var model = new NewTicketViewModel();
 
-            foreach (var fieldKeyValue in fieldValues)
+            foreach (var displayNameWithValue in displayNamesWithValues)
             {
-                var mutatorFunc = _conversionMap[fieldKeyValue.Key];
+                var mutatorFunc = _conversionMap[displayNameWithValue.Key];
 
-                mutatorFunc(model, fieldKeyValue.Value);
+                mutatorFunc(model, displayNameWithValue.Value);
             }
 
             return model;

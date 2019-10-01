@@ -19,23 +19,23 @@ namespace Zoo.Ui
 
         public async Task Activated()
         {
-            foreach (var inputLine in Converter.FieldDisplayText)
+            foreach (var fieldDisplayName in Converter.FieldDisplayNames)
             {
-                var withRightAlignment = $"{inputLine,30}";
+                var withRightAlignment = $"{fieldDisplayName,30}";
                 await ConsoleWrapper.WriteLineAsync(withRightAlignment);
             }
 
-            var fieldValues = new Dictionary<string, string>();
-            for (var lineNumber = 0; lineNumber < Converter.FieldDisplayText.Count(); lineNumber++)
+            var displayNamesWithValues = new Dictionary<string, string>();
+            for (var lineNumber = 0; lineNumber < Converter.FieldDisplayNames.Count(); lineNumber++)
             {
                 ConsoleWrapper.SetCursorPosition(32, lineNumber);
                 var value = await ConsoleWrapper.ReadLineAsync();
-                var field = Converter.FieldDisplayText.ElementAt(lineNumber);
+                var field = Converter.FieldDisplayNames.ElementAt(lineNumber);
 
-                fieldValues.Add(field, value);
+                displayNamesWithValues.Add(field, value);
             }
 
-            var newTicket = Converter.ConvertInputToModel(fieldValues);
+            var newTicket = Converter.ConvertInputToModel(displayNamesWithValues);
 
             Service.SaveNewTicket(newTicket);
         }
